@@ -1424,14 +1424,22 @@
         const themeToggleMobile = document.getElementById('theme-toggle-mobile');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        // Loader Elimination Event Layer
-        window.addEventListener('load', () => {
+        // Loader Elimination Event Layer (Optimized for instant perceived load)
+        document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                loader.classList.add('opacity-0');
-                setTimeout(() => loader.remove(), 500);
+                if (loader) {
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => loader.remove(), 500);
+                }
                 triggerScrollAnimations(); // Fire early checking loops
-            }, 400);
+            }, 100); // reduced timeout for snappier experience
         });
+
+        // Failsafe backup to remove loader if DOMContentLoaded was missed
+        setTimeout(() => {
+            const fallbackLoader = document.getElementById('loader');
+            if (fallbackLoader) fallbackLoader.remove();
+        }, 3000);
 
         // Sticky Scrolling Header Transformation Routine
         window.addEventListener('scroll', () => {
